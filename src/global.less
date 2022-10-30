@@ -1,0 +1,117 @@
+@import '~antd/es/style/variable.less';
+@import '~antd/dist/antd.dark.less'; // 引入官方提供的暗色 less 样式入口文件
+// @import '~antd/dist/antd.compact.less'; // 引入官方提供的紧凑 less 样式入口文件
+
+
+  @font-face {
+    font-family: "Bitstream Vera Serif Bold";
+    src: url("http://file.1024sir.com/Kanit-Regular.ttf");
+
+  }
+
+
+html,
+body,
+#root {
+  background-color: #151618;
+  font-size: 10px;
+  height: 100%;
+  color: #FFFFFF;
+}
+
+body * {
+    font-family: "Bitstream Vera Serif Bold", serif;
+ }
+
+
+.ant-pro-base-menu-item-title {
+  color: #888893;
+}
+
+.ant-menu-item {
+  color: aliceblue;
+  font-size: 1.7rem;
+  // height: 55px !important;
+}
+
+.ant-menu-item .anticon{
+  font-size: 1.7rem !important;
+
+}
+
+.ant-menu-item-selected{
+  border: 0.5px solid #19FB80;
+  border-radius: 5px 15px !important;
+  width: 98% !important;
+  display: flex;
+  align-items: center;
+
+  .ant-pro-base-menu-item-title{
+    svg{
+      color: #19FB80 !important;
+    }
+    span{
+      color: #FFFFFF;
+    }
+  }
+}
+
+
+.ant-layout-sider{
+  background-color: #1B1F24 !important;
+}
+
+// .ant-select{
+//   background-color: transparent !important
+// }
+.colorWeak {
+  filter: invert(80%);
+}
+
+.ant-layout {
+  min-height: 100vh;
+}
+.ant-pro .ant-pro-layout .ant-pro-layout-content {
+    padding: 0px;
+  background-color: #151618;
+}
+.ant-pro-sider.ant-layout-sider.ant-pro-sider-fixed {
+  left: unset;
+}
+.ant-pro-sider-collapsed-button{
+    background-color: #19FB80;
+    color: #151618;
+    z-index: 99999;
+}
+
+canvas {
+  display: block;
+}
+
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+@media (max-width: @screen-xs) {
+  .ant-table {
+    width: 100%;
+    overflow-x: auto;
+    &-thead > tr,
+    &-tbody > tr {
+      > th,
+      > td {
+        white-space: pre;
+        > span {
+          display: block;
+        }
+      }
+    }
+  }
+}
