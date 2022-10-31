@@ -1,14 +1,36 @@
-import { PageContainer } from '@ant-design/pro-components';
+import { Col, Row, Image, Divider, Button } from 'antd';
 import React from 'react';
 import styles from './index.less'
+import {
+  useContractRead,
+} from 'wagmi';
 
+import { abi } from '../../ABI/NFTMarketplace.json'
+import { addressMarketContract } from "../../static/constance"
+import NftDetai from './NftDetai';
 
-const Farm: React.FC = () => {
+const Products: React.FC = () => {
+
+  const MyPurchasedItems = useContractRead({
+    address: addressMarketContract,
+    abi,
+    functionName: 'fetchMyPurchasedItems',
+  })
+
   return (
-    <div>
-     Farm
+    <div className={styles.products}>
+      <h1>NFT Market - my bought</h1>
+      <Row gutter={[16, 16]} >
+        {
+          (MyPurchasedItems?.data as any)?.map((item: any,index:number) => {
+            return <Col key={index} span={4}>
+              <NftDetai item={item} />
+            </Col>
+          })
+        }
+      </Row>
     </div>
   );
 };
 
-export default Farm;
+export default Products;

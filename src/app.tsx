@@ -84,14 +84,9 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
         },
         menuHeaderRender: (logo, title) => (
             <div style={{ height: 60, display: 'flex', alignItems: 'center' }}>
-                {
-                    collapsed ? <div>
-                        <img src={noName} width={50} alt="" />
-                    </div>
-                        : <div>
-                            <img src={gloop} alt="" />
+                <div>
+                          <img src={noName} width={50} alt="" />
                         </div>
-                }
             </div>
 
         ),

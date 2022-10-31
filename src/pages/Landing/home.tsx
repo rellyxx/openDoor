@@ -1,4 +1,4 @@
-import { Image, Col, Row, Card, Divider, message, Space } from 'antd';
+import { Image, Col, Row, Card, Divider, message, Space, Button } from 'antd';
 import React, { useEffect } from 'react';
 import styles from './index.less'
 import logo from './../../../public/icons/gloop.svg'
@@ -173,6 +173,9 @@ const Home: React.FC = () => {
                     <Col span={18}>
                         <Row className={styles.menus} align='middle' justify='end'>
                             <Space size={80}>
+                                <Link to={'/explore'}>
+                                    <div style={{background:'#19FB80'}} className={styles.btn}>Exchange</div>
+                                </Link>
                                 <img onClick={() => window.open('https://twitter.com/')} className={styles.menu} src={twitter} alt="twitter" />
                                 <img onClick={() => window.open('https://discord.com/')} className={styles.menu} src={discord} alt="discord" />
                                 <ConnectButton />

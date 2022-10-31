@@ -1,96 +1,99 @@
-import { Col, Row } from 'antd';
+import { Col, Row, Image, Divider, Button } from 'antd';
 import React from 'react';
 import styles from './index.less'
 import strongbox from './../../../public/icons/strongbox.svg'
-import glp from './../../../public/icons/glp.svg'
+import {
+  useContractRead,
+} from 'wagmi';
 
+import { abi } from '../../ABI/NFTMarketplace.json'
+import { addressMarketContract } from "../../static/constance"
+import { BigNumber, ethers } from 'ethers';
+import NftDetai from './NftDetai';
 
 const Products: React.FC = () => {
+
+  const listingFee = useContractRead({
+    address: addressMarketContract,
+    abi,
+    functionName: 'listingFee',
+  })
+
+
+  const activeItems = useContractRead({
+    address: addressMarketContract,
+    abi,
+    functionName: 'fetchActiveItems',
+  })
+
+
+  const MyPurchasedItems = useContractRead({
+    address: addressMarketContract,
+    abi,
+    functionName: 'fetchMyPurchasedItems',
+  })
+
+
+  const MyCreatedItems = useContractRead({
+    address: addressMarketContract,
+    abi,
+    functionName: 'fetchMyCreatedItems',
+  })
+
+
   return (
     <div className={styles.products}>
-      <h1>Produts Overview</h1>
+      <h1>Market Overview</h1>
       <Row justify='space-between'>
-          <Col className={styles.col} >
-                <div>
-                  <img src={strongbox} alt="" />
-                  <span>Total Collateral</span>
-                  <div className={styles.num}>
-                    $25,315,96.66
-                  </div>
-                </div>
-          </Col>
-          <Col className={styles.col} >
-                <div>
-                  <img src={strongbox} alt="" />
-                  <span>Total Collateral</span>
-                  <div className={styles.num}>
-                    $25,315,96.66
-                  </div>
-                </div>
-          </Col>
-          <Col className={styles.col} >
-                <div>
-                  <img src={strongbox} alt="" />
-                  <span>Total Collateral</span>
-                  <div className={styles.num}>
-                    $25,315,96.66
-                  </div>
-                </div>
-          </Col>
+        <Col className={styles.col} >
+          <div>
+            <img src={strongbox} alt="" />
+            <span>List Fee</span>
+            <div className={styles.num}>
+              {ethers.utils.formatEther(listingFee?.data as any || 0) + "eth"}
+            </div>
+          </div>
+        </Col>
+        <Col className={styles.col} >
+          <div>
+            <img src={strongbox} alt="" />
+            <span>active Items</span>
+            <div className={styles.num}>
+              {(activeItems.data as [])?.length}
+            </div>
+          </div>
+        </Col>
+        <Col className={styles.col} >
+          <div>
+            <img src={strongbox} alt="" />
+            <span>My Purchased Items</span>
+            <div className={styles.num}>
+              {(MyPurchasedItems.data as [])?.length}
+            </div>
+          </div>
+        </Col>
+        <Col className={styles.col} >
+          <div>
+            <img src={strongbox} alt="" />
+            <span>My Created Items</span>
+            <div className={styles.num}>
+              {(MyCreatedItems.data as [])?.length}
+            </div>
+          </div>
+        </Col>
       </Row>
 
-      <Row className={styles.glp}>
-        <Col span={8}>
-          <h1>Produts</h1>
-          <Col>
-                  <div className={styles.card}>
-                      <div className={styles.title}> 
-                        <div className={styles.strongbox}>
-                          <img src={glp} alt="GLP" />
-                        </div> 
-                        <span>GLP</span>
-                      </div>
-                      <div style={{border:0}} className={styles.content}>
-                        <div className={styles.row} style={{background:'transparent',border:'0px'}}>
-                          <div className={styles.descNumber}>
-                              <p className={styles.desc}>Min Collateral Ratio</p>
-                              <div className={styles.number}>150%</div>
-                          </div>
+      <Divider/>
 
-                          <div style={{textAlign:'right'}} className={styles.descNumber}>
-                              <p className={styles.desc}>APR</p>
-                              <div className={styles.number}>150%</div>
-                          </div>
-                        </div>
-
-                        <div className={styles.row}>
-                          <div className={styles.descNumber}>
-                              <p className={styles.desc}>Your Deposit</p>
-                              <div className={styles.number}>$10,360</div>
-                          </div>
-
-                          <div style={{textAlign:'right'}} className={styles.descNumber}>
-                              <p className={styles.desc}>Rewards</p>
-                              <div className={styles.number}>$1452.52</div>
-                          </div>
-                        </div>
-
-                        <div className={styles.row}>
-                          <div className={styles.descNumber}>
-                              <p className={styles.desc}>Current TotalDeposits</p>
-                              <div className={styles.number}>$4500360</div>
-                          </div>
-
-                          <div style={{textAlign:'right'}} className={styles.descNumber}>
-                              <p className={styles.desc}>Max Capacity</p>
-                              <div className={styles.number}>$24500360</div>
-                          </div>
-                        </div>
-                        
-                      </div>
-                  </div>
-                </Col>
-        </Col>
+      <h1>NFT Market - all</h1>
+      <Row gutter={[16, 16]} >
+        {
+          (activeItems?.data as any)?.map((item: any,index: React.Key | null | undefined)=>{
+            return <Col key={index} span={4}>
+                  <NftDetai item={item}/>
+            </Col>
+          }) 
+        }
       </Row>
     </div>
   );
