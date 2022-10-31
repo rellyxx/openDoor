@@ -19,7 +19,7 @@ import { Link } from '@umijs/max';
 import { Web3Modal } from '@web3modal/react';
 import { abi, NFT_CONTRACT_ADDRESS } from "../../ABI/nft.js";
 import { Contract, providers, utils } from "ethers";
-import { ConnectButton, getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import { ConnectButton, getDefaultWallets, RainbowKitProvider, darkTheme  } from '@rainbow-me/rainbowkit';
 import {
     useAccount,
     useContractRead,
@@ -60,7 +60,7 @@ const Landing: React.FC = ({children}) => {
     return (
         <div>
                 <WagmiConfig client={wagmiClient}>
-                    <RainbowKitProvider appInfo={{ appName: 'gloop' }} chains={chains}>
+                    <RainbowKitProvider theme={darkTheme()} appInfo={{ appName: 'gloop' }} chains={chains}>
                         <Home/>
                     </RainbowKitProvider>
                 </WagmiConfig>

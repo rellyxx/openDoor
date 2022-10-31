@@ -18,6 +18,7 @@ import {
     RainbowKitProvider,
     getDefaultWallets,
     connectorsForWallets,
+    darkTheme,
 } from '@rainbow-me/rainbowkit';
 import { argentWallet, trustWallet } from '@rainbow-me/rainbowkit/wallets';
 import { chain, createClient, configureChains, WagmiConfig } from 'wagmi';
@@ -104,7 +105,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
                     <ConfigProvider prefixCls="gloop">
                         <div>
                             <WagmiConfig client={wagmiClient}>
-                                <RainbowKitProvider appInfo={{ appName: 'gloop' }} chains={chains}>
+                                <RainbowKitProvider theme={darkTheme()} appInfo={{ appName: 'gloop' }} chains={chains}>
                                     <Header />
                                     {children}
                                 </RainbowKitProvider>

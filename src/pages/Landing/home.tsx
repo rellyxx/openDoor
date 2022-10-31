@@ -1,4 +1,4 @@
-import { Image, Col, Row, Card, Divider } from 'antd';
+import { Image, Col, Row, Card, Divider, message, Space } from 'antd';
 import React, { useEffect } from 'react';
 import styles from './index.less'
 import logo from './../../../public/icons/gloop.svg'
@@ -18,7 +18,7 @@ import gloop from './../../../public/icons/gloop.svg'
 import { Link } from '@umijs/max';
 import { Web3Modal } from '@web3modal/react';
 import { abi, NFT_CONTRACT_ADDRESS } from "../../ABI/nft.js";
-import { Contract, providers, utils } from "ethers";
+import { BigNumber, Contract, ethers, providers, utils } from "ethers";
 import { ConnectButton, getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
 import {
     useAccount,
@@ -27,7 +27,9 @@ import {
     usePrepareContractWrite,
     useWaitForTransaction,
     useSigner,
-    useBalance
+    useBalance,
+    chainId,
+    useNetwork
 } from 'wagmi';
 
 import { chain, createClient, configureChains, WagmiConfig } from 'wagmi';
@@ -35,6 +37,12 @@ import { publicProvider } from 'wagmi/providers/public';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import Landing from './index';
 import moment from 'moment';
+
+import {
+    useConnectModal,
+    useAccountModal,
+    useChainModal,
+} from '@rainbow-me/rainbowkit';
 
 const { chains, provider } = configureChains(
     [chain.mainnet, chain.goerli, chain.arbitrum, chain.arbitrumGoerli],
@@ -55,103 +63,104 @@ const wagmiClient = createClient({
 
 const Home: React.FC = () => {
 
+    const { address, isConnecting, isDisconnected } = useAccount()
+
+    const price = useContractRead({
+        address: NFT_CONTRACT_ADDRESS,
+        abi,
+        functionName: '_price',
+    })
 
 
     const symbol = useContractRead({
         address: NFT_CONTRACT_ADDRESS,
         abi,
         functionName: 'symbol',
-      })
+    })
 
     const tokenIds = useContractRead({
         address: NFT_CONTRACT_ADDRESS,
         abi,
         functionName: 'tokenIds',
-      })
+    })
 
-      console.log('tokenIds',tokenIds);
+    console.log('tokenIds', tokenIds);
 
-      const maxTokenIds = useContractRead({
+    const maxTokenIds = useContractRead({
         address: NFT_CONTRACT_ADDRESS,
         abi,
         functionName: 'maxTokenIds',
-      })
+    })
 
-      console.log('maxTokenIds',maxTokenIds);
+    console.log('maxTokenIds', maxTokenIds);
 
 
 
-      const presaleStarted = useContractRead({
+    const presaleStarted = useContractRead({
         address: NFT_CONTRACT_ADDRESS,
         abi,
         functionName: 'presaleStarted',
-      })
+    })
 
-      console.log('presaleStarted',presaleStarted);
+    console.log('presaleStarted', presaleStarted);
 
 
-      const presaleEnded = useContractRead({
+    const presaleEnded = useContractRead({
         address: NFT_CONTRACT_ADDRESS,
         abi,
         functionName: 'presaleEnded',
-      })
+    })
 
-      console.log('presaleEnded',presaleEnded.data?.toString(),moment(parseInt(presaleEnded.data as string)*1000).format('YYYY-MM-DD HH:mm:ss'));
-        console.log('presaleEnded1',new Date().getTime())
+    console.log('presaleEnded', presaleEnded.data?.toString(), moment(parseInt(presaleEnded.data as string) * 1000).format('YYYY-MM-DD HH:mm:ss'));
+    console.log('presaleEnded1', new Date().getTime())
 
-        console.log('presaleEnded1',new Date().getTime() > parseInt(presaleEnded.data as string)*1000)
+    console.log('presaleEnded1', new Date().getTime() > parseInt(presaleEnded.data as string) * 1000)
 
 
-      const owner = useContractRead({
+    const owner = useContractRead({
         address: NFT_CONTRACT_ADDRESS,
         abi,
         functionName: 'owner',
-      })
+    })
 
-      console.log('owner',owner);
+    console.log('owner', owner);
 
 
     const { config } = usePrepareContractWrite({
         address: NFT_CONTRACT_ADDRESS,
         abi: abi,
         functionName: 'mint',
-        overrides:{
+        overrides: {
             value: utils.parseEther("0.01")
         }
-      })
+    })
 
-    const { write:mint } = useContractWrite(config as any)
+    const { write: mint } = useContractWrite(config as any)
 
 
-      const { config:presaleMintConfig } = usePrepareContractWrite({
+    const { config: presaleMintConfig } = usePrepareContractWrite({
         address: NFT_CONTRACT_ADDRESS,
         abi: abi,
         functionName: 'presaleMint',
-        overrides:{
+        overrides: {
             value: utils.parseEther("0.01")
         }
-      })
-      const { write:presaleMint } = useContractWrite(presaleMintConfig as any)
+    })
+    const { write: presaleMint } = useContractWrite(presaleMintConfig as any)
 
 
-      const { config:startPresaleConfig } = usePrepareContractWrite({
+    const { config: startPresaleConfig } = usePrepareContractWrite({
         address: NFT_CONTRACT_ADDRESS,
         abi: abi,
         functionName: 'startPresale',
-      })
+    })
 
-    const { write:startPresale } = useContractWrite(startPresaleConfig as any)
+    const { write: startPresale } = useContractWrite(startPresaleConfig as any)
 
+    const { chain, chains } = useNetwork()
 
-    const convert=(address:string)=>{
-        return  address.slice(0, 6) + '...' + address.slice(address.length-4, address.length)
-    }
-
-    console.log(tokenIds.data);
-
-
-    console.log('aa',new Array(parseInt((tokenIds.data as any).toString())).fill(1));
-
+    console.log(chain);
+    
 
 
     return (
@@ -162,22 +171,14 @@ const Home: React.FC = () => {
                         <img className={styles.logo} src={gloopNoName} />
                     </Col>
                     <Col span={18}>
-                        <Row className={styles.menus} align='middle'>
-                            <Col span={4}>
-                                {/* <div className={styles.menu}>Documentation</div> */}
-                            </Col>
-                            <Col span={4} className={styles.menu}>
-                                {/* <div className={styles.menu}>Ecosystem News</div> */}
-                            </Col>
-                            <Col span={3}>
+                        <Row className={styles.menus} align='middle' justify='end'>
+                            <Space size={80}>
                                 <img onClick={() => window.open('https://twitter.com/')} className={styles.menu} src={twitter} alt="twitter" />
-                            </Col>
-                            <Col span={3}>
                                 <img onClick={() => window.open('https://discord.com/')} className={styles.menu} src={discord} alt="discord" />
-                            </Col>
-                            <Col span={10}>
-                                    <ConnectButton />
-                            </Col>
+                                <ConnectButton />
+                            </Space>
+
+
                         </Row>
                     </Col>
                 </Row>
@@ -192,17 +193,48 @@ const Home: React.FC = () => {
                     <Row align='middle' className={styles.startEarning}>
                         <Col span={8}>
                             {
-                                new Date().getTime() > parseInt(presaleEnded.data as string)*1000?
-                                <div onClick={()=>mint?.()} className={styles.btn}>Public Mint</div>
-                                :
-                                <div onClick={()=>presaleMint?.()} className={styles.btn}>Presale Mint</div>
+
+                                presaleStarted && address === owner.data ?
+                                    <div onClick={() => startPresale?.()} className={styles.btn}> Presale Start </div>
+                                    :
+                                    new Date().getTime() > parseInt(presaleEnded.data as string) * 1000
+                                        ?
+                                        <div onClick={() => {
+                                            if (!address) {
+                                                message.info("Please connect wallet！")
+                                                return
+                                            } 
+                                            if (chain?.id !==5 ){
+                                                message.info("Please select goerli")
+                                                return
+
+                                            } 
+                                            mint?.()
+                                        }} className={styles.btn}>Public Mint</div>
+                                        :
+                                        <div onClick={() => {
+                                            console.log(address);
+                                            
+                                            if (!address) {
+                                                message.info("Please connect wallet！")
+                                                return
+                                            } 
+                                            
+                                            if (chain?.id !==5 ){
+                                                message.info("Please select goerli！")
+                                                return
+                                            } 
+                                            presaleMint?.()
+
+                                        }} className={styles.btn}>Presale Mint</div>
                             }
+
                         </Col>
                     </Row>
                     <Row className={styles.statistics}>
                         <Col className={styles.item} span={6}>
                             <div>
-                                <h1>0.01</h1>
+                                <h1>{address && chain?.id ===5  && ethers.utils.formatEther(BigNumber.from(price.data || 0)) + 'eth'}  </h1>
                                 <div className={styles.imgName}>
                                     <img src={TVL} alt="TVL" />
                                     <span>Price</span>
@@ -240,43 +272,16 @@ const Home: React.FC = () => {
                     <Row className={styles.loremipsum} justify='center' align='middle'>
                         <div> Have <span>Minted</span> </div>
                     </Row>
-                    <Row justify='space-around' >
+                    <Row justify='start' >
                         {
-                            new Array(parseInt((tokenIds.data as any).toString())).fill(1).map((item,index)=>{
+                            new Array(parseInt((tokenIds.data as any)?.toString() || 0)).fill(1).map((item, index) => {
                                 return <Col className={styles.loremipsumItem}>
-                                            <div className={styles.strongbox}>
-                                                <Image src='https://ikzttp.mypinata.cloud/ipfs/QmYDvPAXtiJg7s8JdRBSLWdgSphQdac8j1YuQNNxcGE1hg/1.png' />
-                                            </div>
-                                            <h1>Title</h1>
-                                        </Col>
+                                    <div className={styles.strongbox}>
+                                        <Image src={`https://ikzttp.mypinata.cloud/ipfs/QmYDvPAXtiJg7s8JdRBSLWdgSphQdac8j1YuQNNxcGE1hg/${index + 1}.png`} />
+                                    </div>
+                                </Col>
                             })
                         }
-
-
-                        <Col className={styles.loremipsumItem}>
-                            <div className={styles.strongbox}>
-                                <Image src='https://ikzttp.mypinata.cloud/ipfs/QmYDvPAXtiJg7s8JdRBSLWdgSphQdac8j1YuQNNxcGE1hg/1.png' />
-                            </div>
-                            <h1>Title</h1>
-                        </Col>
-                        <Col className={styles.loremipsumItem}>
-                            <div className={styles.strongbox}>
-                                <Image src='https://ikzttp.mypinata.cloud/ipfs/QmYDvPAXtiJg7s8JdRBSLWdgSphQdac8j1YuQNNxcGE1hg/2.png' />
-                            </div>
-                            <h1>Title</h1>
-                        </Col>
-                        <Col className={styles.loremipsumItem}>
-                            <div className={styles.strongbox}>
-                                <Image src='https://ikzttp.mypinata.cloud/ipfs/QmYDvPAXtiJg7s8JdRBSLWdgSphQdac8j1YuQNNxcGE1hg/3.png' />
-                            </div>
-                            <h1>Title</h1>
-                        </Col>
-                        <Col className={styles.loremipsumItem}>
-                            <div className={styles.strongbox}>
-                                <Image src='https://ikzttp.mypinata.cloud/ipfs/QmYDvPAXtiJg7s8JdRBSLWdgSphQdac8j1YuQNNxcGE1hg/4.png' />
-                            </div>
-                            <h1>Title</h1>
-                        </Col>
                     </Row>
                 </div>
             </div>
