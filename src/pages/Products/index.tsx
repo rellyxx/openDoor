@@ -44,8 +44,8 @@ const Products: React.FC = () => {
   return (
     <div className={styles.products}>
       <h1>Market Overview</h1>
-      <Row justify='space-between'>
-        <Col className={styles.col} >
+      <Row gutter={20}>
+        <Col span={6} className={styles.col} >
           <div>
             <img src={strongbox} alt="" />
             <span>List Fee</span>
@@ -54,7 +54,7 @@ const Products: React.FC = () => {
             </div>
           </div>
         </Col>
-        <Col className={styles.col} >
+        <Col span={6} className={styles.col} >
           <div>
             <img src={strongbox} alt="" />
             <span>active Items</span>
@@ -63,7 +63,7 @@ const Products: React.FC = () => {
             </div>
           </div>
         </Col>
-        <Col className={styles.col} >
+        <Col span={6} className={styles.col} >
           <div>
             <img src={strongbox} alt="" />
             <span>My Purchased Items</span>
@@ -72,7 +72,7 @@ const Products: React.FC = () => {
             </div>
           </div>
         </Col>
-        <Col className={styles.col} >
+        <Col span={6} className={styles.col} >
           <div>
             <img src={strongbox} alt="" />
             <span>My Created Items</span>
@@ -86,13 +86,13 @@ const Products: React.FC = () => {
       <Divider/>
 
       <h1>NFT Market - all</h1>
-      <Row gutter={[16, 16]} >
+      <Row gutter={[30, 20]} >
         {
           (activeItems?.data as any)?.map((item: any,index: React.Key | null | undefined)=>{
-            return <Col key={index} span={4}>
+            return <Col key={index} span={6}>
                   <NftDetai item={item}/>
             </Col>
-          }) 
+          })
         }
       </Row>
     </div>
