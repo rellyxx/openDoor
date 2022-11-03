@@ -29,10 +29,11 @@ import {
     useSigner,
     useBalance,
     chainId,
-    useNetwork
+    useNetwork,
+    useSwitchNetwork
 } from 'wagmi';
 
-import { chain, createClient, configureChains, WagmiConfig } from 'wagmi';
+import { chain as chainObj, createClient, configureChains, WagmiConfig } from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import Landing from './index';
@@ -45,7 +46,7 @@ import {
 } from '@rainbow-me/rainbowkit';
 
 const { chains, provider } = configureChains(
-    [chain.mainnet, chain.goerli, chain.arbitrum, chain.arbitrumGoerli],
+    [chainObj.mainnet, chainObj.goerli, chainObj.arbitrum, chainObj.arbitrumGoerli],
     [alchemyProvider({ apiKey: 'v54XKO_i8u4kDLFXG8PNQH32fJFQK6QH' }), publicProvider()]
 );
 
@@ -62,6 +63,15 @@ const wagmiClient = createClient({
 
 
 const Home: React.FC = () => {
+    const { chain, chains } = useNetwork()
+
+    const { error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork()
+
+    useEffect(()=>{
+        if(chain?.id!==5){
+            switchNetwork?.(chainObj.goerli.id)
+        }
+    },[chain])
 
     const { address, isConnecting, isDisconnected } = useAccount()
 
@@ -157,7 +167,6 @@ const Home: React.FC = () => {
 
     const { write: startPresale } = useContractWrite(startPresaleConfig as any)
 
-    const { chain, chains } = useNetwork()
 
     console.log(presaleStarted);
 

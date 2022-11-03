@@ -28,7 +28,8 @@ import {
     useWaitForTransaction,
     useSigner,
     useBalance,
-    useNetwork
+    useNetwork,
+    useSwitchNetwork
 } from 'wagmi';
 
 import { chain, createClient, configureChains, WagmiConfig } from 'wagmi';
@@ -54,16 +55,7 @@ const wagmiClient = createClient({
 
 
 const Landing: React.FC = ({children}) => {
-    const { chain, chains } = useNetwork()
-    console.log(children);
 
-    console.log(chain);
-
-    useEffect(()=>{
-        if(chain?.id!==5){
-            message.info("请选择Goerli")
-        }
-    },[chain])
     
 
 
