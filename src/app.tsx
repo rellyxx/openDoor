@@ -69,13 +69,13 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
         iconfontUrl: defaultSettings.iconfontUrl,
         rightContentRender: () => <RightContent />,
         collapsed,
-        collapsedButtonRender: () => <div style={{ zIndex: 9999999, position: 'absolute', top: 30, left: collapsed ? 80 : 280 }} onClick={() => setcollapsed(!collapsed)}>
-            <div style={{ height: 43, width: 43, borderRadius: 50, background: '#1B1F24', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                {
-                    collapsed ? <img src={Vector} /> : <img src={Vector} />
-                }
-            </div>
-        </div>,
+        // collapsedButtonRender: () => <div style={{ zIndex: 9999999, position: 'absolute', top: 30, left: collapsed ? 80 : 280 }} onClick={() => setcollapsed(!collapsed)}>
+        //     <div style={{ height: 43, width: 43, borderRadius: 50, background: '#1B1F24', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+        //         {
+        //             collapsed ? <img src={Vector} /> : <img src={Vector} />
+        //         }
+        //     </div>
+        // </div>,
         onCollapse: (e) => {
             setcollapsed(e)
         },

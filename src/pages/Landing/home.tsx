@@ -159,7 +159,7 @@ const Home: React.FC = () => {
 
     const { chain, chains } = useNetwork()
 
-    console.log(chain);
+    console.log(presaleStarted);
 
 
 
@@ -197,7 +197,7 @@ const Home: React.FC = () => {
                         <Col span={8}>
                             {
 
-                                presaleStarted && address === owner.data ?
+new Date().getTime() < parseInt(presaleEnded.data as string) * 1000 && address === owner.data ?
                                     <div onClick={() => startPresale?.()} className={styles.btn}> Presale Start </div>
                                     :
                                     new Date().getTime() > parseInt(presaleEnded.data as string) * 1000
