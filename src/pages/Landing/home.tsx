@@ -160,7 +160,7 @@ const Home: React.FC = () => {
     const { chain, chains } = useNetwork()
 
     console.log(chain);
-    
+
 
 
     return (
@@ -206,27 +206,27 @@ const Home: React.FC = () => {
                                             if (!address) {
                                                 message.info("Please connect wallet！")
                                                 return
-                                            } 
+                                            }
                                             if (chain?.id !==5 ){
                                                 message.info("Please select goerli")
                                                 return
 
-                                            } 
+                                            }
                                             mint?.()
                                         }} className={styles.btn}>Public Mint</div>
                                         :
                                         <div onClick={() => {
                                             console.log(address);
-                                            
+
                                             if (!address) {
                                                 message.info("Please connect wallet！")
                                                 return
-                                            } 
-                                            
+                                            }
+
                                             if (chain?.id !==5 ){
                                                 message.info("Please select goerli！")
                                                 return
-                                            } 
+                                            }
                                             presaleMint?.()
 
                                         }} className={styles.btn}>Presale Mint</div>
@@ -275,10 +275,10 @@ const Home: React.FC = () => {
                     <Row className={styles.loremipsum} justify='center' align='middle'>
                         <div> Have <span>Minted</span> </div>
                     </Row>
-                    <Row justify='start' >
+                    <Row  gutter={[40,20]} >
                         {
                             new Array(parseInt((tokenIds.data as any)?.toString() || 0)).fill(1).map((item, index) => {
-                                return <Col className={styles.loremipsumItem}>
+                                return <Col span={6} className={styles.loremipsumItem}>
                                     <div className={styles.strongbox}>
                                         <Image src={`https://ikzttp.mypinata.cloud/ipfs/QmYDvPAXtiJg7s8JdRBSLWdgSphQdac8j1YuQNNxcGE1hg/${index + 1}.png`} />
                                     </div>
