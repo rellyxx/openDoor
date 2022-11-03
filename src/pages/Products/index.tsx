@@ -86,10 +86,10 @@ const Products: React.FC = () => {
       <Divider/>
 
       <h1>NFT Market - all</h1>
-      <Row gutter={[40, 40]} >
+      <Row gutter={[40, 40]} justify='center' >
         {
           (activeItems?.data as any)?.map((item: any,index: React.Key | null | undefined)=>{
-            return <Col key={index} span={6}>
+            return <Col key={index} >
                   <NftDetai item={item}/>
             </Col>
           })

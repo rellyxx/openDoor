@@ -1,4 +1,4 @@
-import { Image, Col, Row, Card, Divider } from 'antd';
+import { Image, Col, Row, Card, Divider, message } from 'antd';
 import React, { useEffect } from 'react';
 import styles from './index.less'
 import logo from './../../../public/icons/gloop.svg'
@@ -27,7 +27,8 @@ import {
     usePrepareContractWrite,
     useWaitForTransaction,
     useSigner,
-    useBalance
+    useBalance,
+    useNetwork
 } from 'wagmi';
 
 import { chain, createClient, configureChains, WagmiConfig } from 'wagmi';
@@ -36,7 +37,7 @@ import { alchemyProvider } from 'wagmi/providers/alchemy';
 import Home from './home';
 
 const { chains, provider } = configureChains(
-    [chain.mainnet, chain.goerli, chain.arbitrum, chain.arbitrumGoerli],
+    [chain.mainnet, chain.goerli,],
     [alchemyProvider({ apiKey: 'v54XKO_i8u4kDLFXG8PNQH32fJFQK6QH' }), publicProvider()]
 );
 
@@ -53,8 +54,17 @@ const wagmiClient = createClient({
 
 
 const Landing: React.FC = ({children}) => {
-
+    const { chain, chains } = useNetwork()
     console.log(children);
+
+    console.log(chain);
+
+    useEffect(()=>{
+        if(chain?.id!==5){
+            message.info("请选择Goerli")
+        }
+    },[chain])
+    
 
 
     return (
