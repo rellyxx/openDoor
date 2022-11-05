@@ -30,7 +30,8 @@ import {
     useBalance,
     chainId,
     useNetwork,
-    useSwitchNetwork
+    useSwitchNetwork,
+    useContractEvent
 } from 'wagmi';
 
 import { chain as chainObj, createClient, configureChains, WagmiConfig } from 'wagmi';
@@ -92,6 +93,7 @@ const Home: React.FC = () => {
         address: NFT_CONTRACT_ADDRESS,
         abi,
         functionName: 'tokenIds',
+        watch: true,
     })
 
     console.log('tokenIds', tokenIds);
@@ -145,7 +147,7 @@ const Home: React.FC = () => {
         }
     })
 
-    const { write: mint } = useContractWrite(config as any)
+    const { write: mint, data, isLoading: isLoadingOfmint, isSuccess,  } = useContractWrite(config as any)
 
 
     const { config: presaleMintConfig } = usePrepareContractWrite({
@@ -168,7 +170,21 @@ const Home: React.FC = () => {
     const { write: startPresale } = useContractWrite(startPresaleConfig as any)
 
 
-    console.log(presaleStarted);
+    console.log(isSuccess);
+
+    useContractEvent({
+        address: NFT_CONTRACT_ADDRESS,
+        abi: abi,
+        eventName: 'Transfer',
+        listener(from, to, tokenId) {
+          console.log(from, to, tokenId)
+          console.log('from', from)
+          console.log('to', to)
+          console.log('tokenId', tokenId)
+          message.success('success mint')
+
+        },
+      })
 
 
 
@@ -222,7 +238,7 @@ new Date().getTime() < parseInt(presaleEnded.data as string) * 1000 && address =
 
                                             }
                                             mint?.()
-                                        }} className={styles.btn}>Public Mint</div>
+                                        }} className={styles.btn}>{isLoadingOfmint&&!isSuccess?'Minting':"Public Mint"}</div>
                                         :
                                         <div onClick={() => {
                                             console.log(address);
@@ -284,14 +300,15 @@ new Date().getTime() < parseInt(presaleEnded.data as string) * 1000 && address =
                     <Row className={styles.loremipsum} justify='center' align='middle'>
                         <div> Have <span>Minted</span> </div>
                     </Row>
-                    <Row  gutter={[40,20]} >
+                    <Row  className='animate__animated  animate__bounceInLeft' gutter={[40,20]} >
                         {
                             new Array(parseInt((tokenIds.data as any)?.toString() || 0)).fill(1).map((item, index) => {
                                 return <Col span={6} className={styles.loremipsumItem}>
-                                    <div className={styles.strongbox}>
-                                        <Image src={`https://ikzttp.mypinata.cloud/ipfs/QmYDvPAXtiJg7s8JdRBSLWdgSphQdac8j1YuQNNxcGE1hg/${index + 1}.png`} />
-                                    </div>
-                                </Col>
+                                        <div className={styles.strongbox}>
+                                            <Image className='hvr-buzz' src={`https://ikzttp.mypinata.cloud/ipfs/QmYDvPAXtiJg7s8JdRBSLWdgSphQdac8j1YuQNNxcGE1hg/${index + 1}.png`} />
+                                        </div>
+                                        </Col>
+
                             })
                         }
                     </Row>
