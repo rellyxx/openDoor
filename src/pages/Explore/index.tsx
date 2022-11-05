@@ -24,6 +24,7 @@ const Products: React.FC = () => {
     address: addressMarketContract,
     abi,
     functionName: 'fetchActiveItems',
+    watch:true
   })
 
 
@@ -31,6 +32,7 @@ const Products: React.FC = () => {
     address: addressMarketContract,
     abi,
     functionName: 'fetchMyPurchasedItems',
+    watch:true
   })
 
 
@@ -38,6 +40,7 @@ const Products: React.FC = () => {
     address: addressMarketContract,
     abi,
     functionName: 'fetchMyCreatedItems',
+    watch:true
   })
 
 
@@ -86,7 +89,7 @@ const Products: React.FC = () => {
       <Divider/>
 
       <h1>NFT Market - all</h1>
-      <Row gutter={[40, 40]} justify='center' >
+      <Row gutter={[40, 40]}  >
         {
           (activeItems?.data as any)?.map((item: any,index: React.Key | null | undefined)=>{
             return <Col key={index} >

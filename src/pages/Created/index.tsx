@@ -22,7 +22,7 @@ const Products: React.FC = () => {
       <Row gutter={[16, 16]} >
         {
           (MyCreatedItems?.data as any)?.map((item: any, index: number) => {
-            return <Col key={index} span={4}>
+            return <Col key={index} >
               <NftDetai item={item} />
             </Col>
           })

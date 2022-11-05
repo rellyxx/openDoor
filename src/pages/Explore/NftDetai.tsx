@@ -1,4 +1,4 @@
-import { Button, Col, Row, Image } from 'antd';
+import { Button, Col, Row, Image, Divider, Popover } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { chainId, useAccount, useContractRead, useContractWrite, usePrepareContractWrite, useSigner } from 'wagmi';
 import styles from './index.less'
@@ -7,6 +7,7 @@ import { BigNumber, Contract, ethers, utils } from 'ethers';
 import { Network, Alchemy } from "alchemy-sdk";
 import { abi } from '../../ABI/NFTMarketplace.json'
 import { addressMarketContract } from "../../static/constance"
+import { BulbOutlined, InfoOutlined } from '@ant-design/icons';
 
 const settings = {
     apiKey: 'xo2RoAerQuiC0xoBAQsysVcCSVNvYTZm', // Replace with your Alchemy API Key.
@@ -55,36 +56,45 @@ const NftDetai = ({ item }: Props) => {
 
     const deleteMarketItem = async (itemId: any) => {
         console.log(itemId);
-        
+
         const market = new Contract(addressMarketContract, abi, signer as any);
         await market.deleteMarketItem(itemId)
     }
 
     console.log(item);
-    
+    console.log(itemInfo);
+
 
 
     return (
         <div className={styles.imgCard}>
-            <Image width={'100%'} height={200} src={itemInfo?.svg} />
-            <Row justify='space-between'>
+            <div className={styles.header}>
                 <span>{itemInfo?.name}</span>
-                <span>{ethers.utils.formatEther(item.price.toString())}eth</span>
-            </Row>
-           
-
-            <Row>
-                {((item.seller == account && item.buyer == ethers.constants.AddressZero) || (item.buyer == account))
-                    ? <Button style={{ width: '100%' }} onClick={() => deleteMarketItem(item.id)}>Cancel listing</Button>
-                    : ''
-                }
-
-                {
-                    (item.seller != account && item.state == 0)
-                        ? <Button style={{ width: '100%' }} onClick={() => createMarketSale(item.nftContract,item.id,item.price)}>Buy this</Button>
+                <Popover content={itemInfo?.description} >
+                <BulbOutlined style={{ fontSize: '20px', color: '#08c', cursor:'pointer' }} />
+                </Popover>
+            </div>
+            <Divider />
+            <div style={{padding:'0px 20px 20px 20px'}}>
+                <Image width={'100%'} height={200} src={itemInfo?.svg} />
+                {/* <Row justify='space-between'>
+                    <span>{itemInfo?.name}</span>
+                    <span>{ethers.utils.formatEther(item.price.toString())}eth</span>
+                </Row> */}
+                <Row style={{marginTop:20}}>
+                    {((item.seller == account && item.buyer == ethers.constants.AddressZero) || (item.buyer == account))
+                        ? <Button style={{ width: '100%' }} onClick={() => deleteMarketItem(item.id)}>Cancel listing</Button>
                         : ''
-                }
-            </Row>
+                    }
+
+                    {
+                        (item.seller != account && item.state == 0)
+                            ? <Button style={{ width: '100%' }} onClick={() => createMarketSale(item.nftContract,item.id,item.price)}>Buy this {ethers.utils.formatEther(item.price.toString())}eth</Button>
+                            : ''
+                    }
+                </Row>
+            </div>
+
         </div>
     );
 };

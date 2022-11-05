@@ -70,7 +70,7 @@ const Products: React.FC = () => {
       <Row gutter={[16, 16]} >
         {
           dataList?.map((item: any,index:number) => {
-            return <Col key={index} span={4}>
+            return <Col key={index} >
               <NftDetai address={item.contract.address} tokenId={item.tokenId} listingFee={listingFee} item={item} />
             </Col>
           })
