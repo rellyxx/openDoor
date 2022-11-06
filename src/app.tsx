@@ -8,8 +8,6 @@ import defaultSettings from '../config/defaultSettings';
 import Header from './components/Header';
 import { errorConfig } from './requestErrorConfig';
 import noName from './../public/icons/gloopNoName.png';
-import gloop from './../public/icons/gloop.png';
-import Vector from './../public/icons/Vector.svg';
 import './antd.rewrite.css'
 import { ConfigProvider } from 'antd';
 
@@ -17,10 +15,8 @@ import { alchemyProvider } from 'wagmi/providers/alchemy';
 import {
     RainbowKitProvider,
     getDefaultWallets,
-    connectorsForWallets,
     darkTheme,
 } from '@rainbow-me/rainbowkit';
-import { argentWallet, trustWallet } from '@rainbow-me/rainbowkit/wallets';
 import { chain, createClient, configureChains, WagmiConfig } from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
 import '@rainbow-me/rainbowkit/styles.css';
@@ -69,13 +65,6 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
         iconfontUrl: defaultSettings.iconfontUrl,
         rightContentRender: () => <RightContent />,
         collapsed,
-        // collapsedButtonRender: () => <div style={{ zIndex: 9999999, position: 'absolute', top: 30, left: collapsed ? 80 : 280 }} onClick={() => setcollapsed(!collapsed)}>
-        //     <div style={{ height: 43, width: 43, borderRadius: 50, background: '#1B1F24', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-        //         {
-        //             collapsed ? <img src={Vector} /> : <img src={Vector} />
-        //         }
-        //     </div>
-        // </div>,
         onCollapse: (e) => {
             setcollapsed(e)
         },
