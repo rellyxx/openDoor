@@ -86,10 +86,10 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
             if (initialState?.loading) return <PageLoading />;
             return (
                 <>
-                    <ConfigProvider prefixCls="gloop">
+                    <ConfigProvider prefixCls="opendoor">
                         <div>
                             <WagmiConfig client={wagmiClient}>
-                                <RainbowKitProvider theme={darkTheme()} appInfo={{ appName: 'gloop' }} chains={chains}>
+                                <RainbowKitProvider theme={darkTheme()} appInfo={{ appName: 'opendoor' }} chains={chains}>
                                     <Header />
                                     {children}
                                 </RainbowKitProvider>
