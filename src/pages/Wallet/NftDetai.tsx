@@ -63,6 +63,8 @@ const NftDetai = ({ address, tokenId, listingFee, item }: Props) => {
     functionName: 'getApproved',
     args:[tokenId]
 })
+console.log(operator);
+
 
   return (
     <div className={styles.imgCard}>

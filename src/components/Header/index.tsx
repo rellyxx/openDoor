@@ -1,39 +1,47 @@
-import { Button, Col, Dropdown, Menu, MenuProps, Row, Select, Space } from 'antd';
+import { Button, Col, Dropdown, Input, Menu, MenuProps, Row, Select, Space } from 'antd';
 import React, { useState } from 'react';
 import styles from './index.less'
-const { Option } = Select;
-import ar from './../../../public/icons/ar.png'
-import { DownOutlined, UserOutlined } from '@ant-design/icons';
 import { ConnectButton, getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
-import Vector from '../../../public/icons/Vector.svg';
+import { chainId, useAccount, useSigner } from 'wagmi';
+import { Contract } from 'ethers';
+import { abi as nftAbi, NFT_CONTRACT_ADDRESS } from "../../ABI/nft.js";
 
 const Header: React.FC = () => {
+	const { address: account, isConnecting, isDisconnected } = useAccount();
+	const { data: signer, isError, isLoading } = useSigner({ chainId: chainId.goerli })
+	const [contractAddress, setContractAddress] = useState('')
+	const handleWithdraw = async () => {
+		console.log(contractAddress);
 
-   
-    const [chain,setChain] = useState("0")
-    const [chainName,setChainName] = useState("0")
-    const [chainIcon,setChainIcon] = useState(<></>)
+		const nftContract = new Contract(contractAddress, nftAbi, signer as any);
+		const data = await nftContract.withdraw();
+		console.log(data);
+	}
 
-  return (
-    <div style={{height:'10rem'}}>
-    <div className={styles.header}>
-        <Row justify='space-between' style={{height:'inherit'}}>
-        <Col>
-                    {/* <div style={{ marginLeft:40 }} onClick={() => history.go(-1)}>
-                        <div style={{ height: 43, width: 43, borderRadius: 50, background: '#1B1F24', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                             <img src={Vector} /> 
-                        </div>
-                    </div> */}
-                    </Col>
-            <Col></Col>
-            <Col style={{paddingRight:20}}>
-              <ConnectButton/>
-            </Col>
+	return (
+		<div style={{ height: '10rem' }}>
+			<div className={styles.header}>
+				<Row justify='space-between' style={{ height: 'inherit' }}>
+					<Col>
+					</Col>
+					<Col>
+					{
+						account==='0x255418669257091e8f0Ad37a12B1D5b72C04b43a'&&
+						<div>
+							<Input onChange={(e) => setContractAddress(e.target.value)} placeholder='contract address' />
+							<Button onClick={handleWithdraw}>withdraw</Button>
+						</div>
+					}
+						
+					</Col>
+					<Col style={{ paddingRight: 20 }}>
+						<ConnectButton />
+					</Col>
 
-        </Row>
-    </div>
-    </div>
-  );
+				</Row>
+			</div>
+		</div>
+	);
 };
 
 export default Header;
