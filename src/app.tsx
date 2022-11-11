@@ -7,7 +7,7 @@ import { useState } from 'react';
 import defaultSettings from '../config/defaultSettings';
 import Header from './components/Header';
 import { errorConfig } from './requestErrorConfig';
-import noName from './../public/icons/gloopNoName.png';
+import noName from './../public/open_door.svg';
 import './antd.rewrite.css'
 import { ConfigProvider } from 'antd';
 

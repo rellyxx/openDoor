@@ -1,7 +1,7 @@
 import { Image, Col, Row, Card, Divider, message, Space, Button } from 'antd';
 import React, { useEffect } from 'react';
 import styles from './index.less'
-import logo from './../../../public/icons/gloop.svg'
+import logo from './../../../public/open_door.svg'
 import twitter from './../../../public/icons/twitter.svg'
 import discord from './../../../public/icons/discord.svg'
 import enterApp from './../../../public/icons/enterApp.svg'
@@ -12,7 +12,7 @@ import TVL from './../../../public/icons/TVL.svg'
 import totalDebt from './../../../public/icons/totalDebt.svg'
 import totaluser from './../../../public/icons/totaluser.svg'
 import availablevaults from './../../../public/icons/availablevaults.svg'
-import gloopNoName from './../../../public/icons/gloopNoName.svg'
+import gloopNoName from './../../../public/open_door.svg'
 import gloop from './../../../public/icons/gloop.svg'
 
 import { Link } from '@umijs/max';
@@ -193,7 +193,8 @@ const Home: React.FC = () => {
             <div style={{ backgroundImage: landingBg }} className={styles.bg}>
                 <Row align='middle'>
                     <Col span={6}>
-                        <img className={styles.logo} src={gloopNoName} />
+                        <Space style={{alignItems:'center',fontSize:20}}> <img className={styles.logo} src={gloopNoName} /><span>OpenDoor</span></Space>
+                       
                     </Col>
                     <Col span={18}>
                         <Row className={styles.menus} align='middle' justify='end'>
