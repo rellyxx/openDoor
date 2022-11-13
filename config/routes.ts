@@ -41,6 +41,7 @@ export default [
   },
   {
     path: '/admin',
+    name: 'Admin',
     icon: 'icon-outline-presention-chart',
     component: './Admin',
 

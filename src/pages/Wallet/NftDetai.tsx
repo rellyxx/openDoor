@@ -84,6 +84,9 @@ const NftDetai = memo(({ item, account }: Props) => {
         console.log(data);
     }
 
+    console.log(operator.data !== addressMarketContract,approved !== addressMarketContract);
+
+
     return (
         <div className={styles.imgCard}>
             <Image width={'100%'} height={200} src={item.rawMetadata?.image} />
@@ -91,10 +94,12 @@ const NftDetai = memo(({ item, account }: Props) => {
 
             <Row>
                 {
-                   operator.data !== addressMarketContract ?
-                        <Button style={{ width: '100%' }} onClick={() => handleApprove(item.contract.address, item.tokenId)}> Approve </Button>
+                   (operator.data === addressMarketContract || approved === addressMarketContract )?
+                   <Button style={{ width: '100%' }} onClick={() => createMarketItem(item.contract.address, item.tokenId)}> Sell </Button>
+
                         :
-                        <Button style={{ width: '100%' }} onClick={() => createMarketItem(item.contract.address, item.tokenId)}> Sell </Button>
+                        <Button style={{ width: '100%' }} onClick={() => handleApprove(item.contract.address, item.tokenId)}> Approve </Button>
+
                 }
 
                 {/* <Button style={{ width: '100%' }} onClick={() => handleApproveAll(item.contract.address,addressMarketContract)}> Approve All </Button> */}
