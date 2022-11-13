@@ -1,4 +1,3 @@
-import RightContent from '@/components/RightContent';
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
 import { PageLoading } from '@ant-design/pro-components';
 import type { RunTimeLayoutConfig } from '@umijs/max';
@@ -9,7 +8,7 @@ import Header from './components/Header';
 import { errorConfig } from './requestErrorConfig';
 import noName from './../public/open_door.svg';
 import './antd.rewrite.css'
-import { ConfigProvider } from 'antd';
+import { ConfigProvider, Space } from 'antd';
 
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import {
@@ -63,7 +62,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
 
     return {
         iconfontUrl: defaultSettings.iconfontUrl,
-        rightContentRender: () => <RightContent />,
+        rightContentRender: () => <div></div>,
         collapsed,
         onCollapse: (e) => {
             setcollapsed(e)
@@ -72,10 +71,14 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
             const { location } = history;
         },
         menuHeaderRender: (logo, title) => (
-            <div style={{ height: 60, display: 'flex', alignItems: 'center' }}>
-                <div>
-                          <img src={noName} width={50} alt="" />
-                        </div>
+            <div style={{ height: 60, display: 'flex', alignItems: 'center', fontSize:20,color:'#fff' }}>
+                <Space>
+                    <img src={noName} width={50} alt="" />
+                    {
+                        !collapsed&& <span>OpenDoor</span>
+                    }
+
+                </Space>
             </div>
 
         ),

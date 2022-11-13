@@ -40,6 +40,12 @@ export default [
     component: './Wallet',
   },
   {
+    path: '/admin',
+    icon: 'icon-outline-presention-chart',
+    component: './Admin',
+
+  },
+  {
     path: '*',
     layout: false,
     component: './404',

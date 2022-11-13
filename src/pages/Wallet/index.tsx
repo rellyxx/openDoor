@@ -1,5 +1,5 @@
 import { Col, Row, Image, Divider, Button } from 'antd';
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useState, useEffect } from 'react';
 import styles from './index.less'
 import strongbox from './../../../public/icons/strongbox.svg'
@@ -32,37 +32,23 @@ const settings = {
 const alchemy = new Alchemy(settings);
 
 const Products: React.FC = () => {
-
-  const listingFee = useContractRead({
-    address: addressMarketContract,
-    abi,
-    functionName: 'listingFee',
-  })
-
-  console.log(listingFee.data?.toString());
-
-  const activeItems = useContractRead({
-    address: addressMarketContract,
-    abi,
-    functionName: 'fetchActiveItems',
-  })
-
-  console.log(activeItems);
-
   const { address: account, isConnecting, isDisconnected } = useAccount()
-
-
   const [dataList, setDataList] = useState<any[]>([])
-  const getNFTMetadata = () => {
+
+  const getNFTMetadata = useCallback(() => {
     alchemy.nft.getNftsForOwner(account as string).then((res) => {
       console.log(res);
       setDataList(res.ownedNfts)
     });
-  }
+  },[account])
+
 
   useEffect(() => {
     getNFTMetadata()
   }, [])
+
+  console.log(111111111);
+
 
   return (
     <div className={styles.products}>
@@ -71,7 +57,9 @@ const Products: React.FC = () => {
         {
           dataList?.map((item: any,index:number) => {
             return <Col key={index} >
-              <NftDetai address={item.contract.address} tokenId={item.tokenId} listingFee={listingFee} item={item} />
+              <NftDetai
+              item={item}
+              account={account} />
             </Col>
           })
         }
