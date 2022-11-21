@@ -186,8 +186,6 @@ const Home: React.FC = () => {
         },
       })
 
-
-
     return (
         <div className={styles.landing}>
             <div style={{ backgroundImage: landingBg }} className={styles.bg}>
@@ -223,7 +221,7 @@ const Home: React.FC = () => {
                         <Col span={8}>
                             {
 
-new Date().getTime() < parseInt(presaleEnded.data as string) * 1000 && address === owner.data ?
+!presaleStarted.data&&address === owner.data ?
                                     <div onClick={() => startPresale?.()} className={styles.btn}> Presale Start </div>
                                     :
                                     new Date().getTime() > parseInt(presaleEnded.data as string) * 1000
