@@ -47,7 +47,7 @@ const Products: React.FC = () => {
     getNFTMetadata()
   }, [])
 
-  console.log(111111111);
+  console.log("dataList",dataList);
 
 
   return (

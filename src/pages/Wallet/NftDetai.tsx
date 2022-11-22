@@ -1,5 +1,5 @@
-import { Button, Col, Row, Image } from 'antd';
-import { chainId, useAccount, useContractEvent, useContractRead, useContractWrite, usePrepareContractWrite, useSigner } from 'wagmi';
+import { Button, Col, Row, Image, Modal } from 'antd';
+import { chainId,  useSigner } from 'wagmi';
 import styles from './index.less'
 import { abi as nftAbi, NFT_CONTRACT_ADDRESS } from "../../ABI/nft.js";
 import { BigNumber, Contract, ethers } from 'ethers';
@@ -18,34 +18,40 @@ const NftDetai = memo(({ item, account }: Props) => {
     const { data: signer, isError, isLoading } = useSigner({ chainId: chainId.goerli })
 
     const [approved,setApproved] = useState('')
+    const [isModalOpen,setIsModalOpen] = useState(false)
+    const [loading,setLoading] = useState(false)
 
 
-    const operator = useContractRead({
-        address: NFT_CONTRACT_ADDRESS,
-        abi: nftAbi,
-        functionName: 'getApproved',
-        args:[item.tokenId]
-    })
-    console.log(operator);
+    // const operator = useContractRead({
+    //     address: NFT_CONTRACT_ADDRESS,
+    //     abi: nftAbi,
+    //     functionName: 'getApproved',
+    //     args:[item.tokenId]
+    // })
+    // console.log(operator);
 
     // useEffect(()=>{
     //    getApproved(item.contract.address,item.tokenId)
     // },[])
 
-    useContractEvent({
-        address: item.contract.address,
-        abi: nftAbi,
-        eventName: 'Approval',
-        listener(owner, approved, tokenId) {
-            console.log(owner, approved, tokenId);
-            getApproved(item.contract.address,tokenId)
-        },
-    })
+    // useContractEvent({
+    //     address: item.contract.address,
+    //     abi: nftAbi,
+    //     eventName: 'Approval',
+    //     listener(owner, approved, tokenId) {
+    //         console.log(22222222222);
+    //         getApproved(item.contract.address,tokenId)
+    //     },
+    // })
 
     const handleApprove = async (contractAddress: string, tokenId: BigNumber) => {
+        setLoading(true)
         const nftContract = new Contract(contractAddress, nftAbi, signer as any);
-        const data = await nftContract.approve(addressMarketContract, tokenId);
-        console.log(data);
+        const approving = await nftContract.approve(addressMarketContract, tokenId);
+        await approving.wait();
+        setApproved(addressMarketContract)
+        setLoading(false)
+
     }
 
 
@@ -84,8 +90,10 @@ const NftDetai = memo(({ item, account }: Props) => {
         console.log(data);
     }
 
-    console.log(operator.data !== addressMarketContract,approved !== addressMarketContract);
+    // console.log(operator.data !== addressMarketContract,approved !== addressMarketContract);
+console.log( approved === addressMarketContract);
 
+console.log( approved , addressMarketContract);
 
     return (
         <div className={styles.imgCard}>
@@ -93,15 +101,13 @@ const NftDetai = memo(({ item, account }: Props) => {
             <span>{item.rawMetadata?.name}</span>
 
             <Row>
-                {
-                   (operator.data === addressMarketContract || approved === addressMarketContract )?
-                   <Button style={{ width: '100%' }} onClick={() => createMarketItem(item.contract.address, item.tokenId)}> Sell </Button>
-
-                        :
-                        <Button style={{ width: '100%' }} onClick={() => handleApprove(item.contract.address, item.tokenId)}> Approve </Button>
-
-                }
-
+                <Button style={{ width: '100%' }} 
+                onClick={async() => {
+                    await getApproved(item.contract.address, item.tokenId)
+                    setIsModalOpen(true)
+                }}
+                > Sell </Button>
+                {/* <Button style={{ width: '100%' }} onClick={() => handleApprove(item.contract.address, item.tokenId)}> Approve </Button> */}
                 {/* <Button style={{ width: '100%' }} onClick={() => handleApproveAll(item.contract.address,addressMarketContract)}> Approve All </Button> */}
 
                 {/* <Button style={{ width: '100%' }} onClick={() => getApproved(item.contract.address,item.tokenId)}> getApproved</Button> */}
@@ -111,6 +117,39 @@ const NftDetai = memo(({ item, account }: Props) => {
                 {/* <Button style={{ width: '100%' }} onClick={() => isApprovedForAll(item.contract.address)}> isApprovedForAll </Button> */}
 
             </Row>
+            <Modal 
+                title={
+                    approved === addressMarketContract?
+                    "Get rich"
+                    :
+                    "Approve"
+                } 
+                open={isModalOpen}  
+                okText={
+                    loading?'Loading':
+                    approved === addressMarketContract?
+                    "Get rich"
+                    :
+                    "Approve"
+                }
+                cancelText={
+                    'Cancel'
+                }
+                onOk={
+                    ()=>
+                    loading?'':
+                    approved === addressMarketContract?
+                    createMarketItem(item.contract.address, item.tokenId)
+                    :
+                    handleApprove(item.contract.address, item.tokenId)
+                }
+                onCancel={()=>setIsModalOpen(false)}
+            >
+                <Row justify='center'>
+                    <Image  height={200} src={item.rawMetadata?.image} />
+                </Row>
+              
+            </Modal>
         </div>
 
 
