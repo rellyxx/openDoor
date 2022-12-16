@@ -31,14 +31,16 @@ import {
     useNetwork,
     useSwitchNetwork
 } from 'wagmi';
+import { mainnet, polygon, optimism, arbitrum, goerli, arbitrumGoerli } from 'wagmi/chains';
 
-import { chain, createClient, configureChains, WagmiConfig } from 'wagmi';
+
+import { createClient, configureChains, WagmiConfig } from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import Home from './home';
 
 const { chains, provider } = configureChains(
-    [chain.mainnet, chain.goerli,],
+    [mainnet, goerli,],
     [alchemyProvider({ apiKey: 'v54XKO_i8u4kDLFXG8PNQH32fJFQK6QH' }), publicProvider()]
 );
 

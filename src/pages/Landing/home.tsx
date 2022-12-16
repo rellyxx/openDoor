@@ -28,15 +28,16 @@ import {
     useWaitForTransaction,
     useSigner,
     useBalance,
-    chainId,
     useNetwork,
     useSwitchNetwork,
     useContractEvent
 } from 'wagmi';
 
-import { chain as chainObj, createClient, configureChains, WagmiConfig } from 'wagmi';
+import {  createClient, configureChains, WagmiConfig } from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
+import { mainnet, polygon, optimism, arbitrum, goerli, arbitrumGoerli } from 'wagmi/chains';
+
 import Landing from './index';
 import moment from 'moment';
 
@@ -47,7 +48,7 @@ import {
 } from '@rainbow-me/rainbowkit';
 
 const { chains, provider } = configureChains(
-    [chainObj.mainnet, chainObj.goerli, chainObj.arbitrum, chainObj.arbitrumGoerli],
+    [mainnet, goerli, arbitrum, arbitrumGoerli],
     [alchemyProvider({ apiKey: 'v54XKO_i8u4kDLFXG8PNQH32fJFQK6QH' }), publicProvider()]
 );
 
@@ -70,7 +71,7 @@ const Home: React.FC = () => {
 
     useEffect(()=>{
         if(chain?.id!==5){
-            switchNetwork?.(chainObj.goerli.id)
+            switchNetwork?.(goerli.id)
         }
     },[chain])
 
@@ -192,7 +193,7 @@ const Home: React.FC = () => {
                 <Row align='middle'>
                     <Col span={6}>
                         <Space style={{alignItems:'center',fontSize:20}}> <img className={styles.logo} src={gloopNoName} /><span>OpenDoor</span></Space>
-                       
+
                     </Col>
                     <Col span={18}>
                         <Row className={styles.menus} align='middle' justify='end'>
@@ -304,7 +305,7 @@ const Home: React.FC = () => {
                             new Array(parseInt((tokenIds.data as any)?.toString() || 0)).fill(1).map((item, index) => {
                                 return <Col span={6} className={styles.loremipsumItem}>
                                         <div className={styles.strongbox}>
-                                            <Image className='hvr-buzz' src={`https://ikzttp.mypinata.cloud/ipfs/QmYDvPAXtiJg7s8JdRBSLWdgSphQdac8j1YuQNNxcGE1hg/${index + 1}.png`} />
+                                            <Image loading="lazy" className='hvr-buzz' src={`https://ikzttp.mypinata.cloud/ipfs/QmYDvPAXtiJg7s8JdRBSLWdgSphQdac8j1YuQNNxcGE1hg/${index + 1}.png`} />
                                         </div>
                                         </Col>
 

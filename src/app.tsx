@@ -16,12 +16,13 @@ import {
     getDefaultWallets,
     darkTheme,
 } from '@rainbow-me/rainbowkit';
-import { chain, createClient, configureChains, WagmiConfig } from 'wagmi';
+import { createClient, configureChains, WagmiConfig } from 'wagmi';
 import { publicProvider } from 'wagmi/providers/public';
 import '@rainbow-me/rainbowkit/styles.css';
+import { mainnet, polygon, optimism, arbitrum, goerli, arbitrumGoerli } from 'wagmi/chains';
 
 const { chains, provider } = configureChains(
-    [chain.mainnet, chain.goerli, chain.arbitrum, chain.arbitrumGoerli],
+    [mainnet, goerli, arbitrum, arbitrumGoerli],
     [alchemyProvider({ apiKey: 'v54XKO_i8u4kDLFXG8PNQH32fJFQK6QH' }), publicProvider()]
 );
 
