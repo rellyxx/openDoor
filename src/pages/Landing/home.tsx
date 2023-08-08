@@ -14,6 +14,7 @@ import totaluser from './../../../public/icons/totaluser.svg'
 import availablevaults from './../../../public/icons/availablevaults.svg'
 import gloopNoName from './../../../public/open_door.svg'
 import gloop from './../../../public/icons/gloop.svg'
+import { abi as sabi } from  '../../ABI/XloopRouter.json'
 
 import { Link } from '@umijs/max';
 import { Web3Modal } from '@web3modal/react';
@@ -30,7 +31,8 @@ import {
     useBalance,
     useNetwork,
     useSwitchNetwork,
-    useContractEvent
+    useContractEvent,
+    erc20ABI
 } from 'wagmi';
 
 import {  createClient, configureChains, WagmiConfig } from 'wagmi';
@@ -70,9 +72,9 @@ const Home: React.FC = () => {
     const { error, isLoading, pendingChainId, switchNetwork } = useSwitchNetwork()
 
     useEffect(()=>{
-        if(chain?.id!==5){
-            switchNetwork?.(goerli.id)
-        }
+        // if(chain?.id!==5){
+        //     switchNetwork?.(goerli.id)
+        // }
     },[chain])
 
     const { address, isConnecting, isDisconnected } = useAccount()
@@ -187,6 +189,50 @@ const Home: React.FC = () => {
         },
       })
 
+    const { data: signer, isError } = useSigner({ chainId: arbitrumGoerli.id })
+    const encodeOpenTroveToMintIOU = (asset: any, assetAmount: any, iouAmount: any, maxFeePct: any, upperHint: string, lowerHint: string) => {
+        const abiCoder = new ethers.utils.AbiCoder();
+        const types = ['address', 'uint256', 'uint256', 'uint256', 'address', 'address'];
+        const values = [asset, assetAmount, iouAmount, maxFeePct, upperHint, lowerHint];
+        const encodedParams = abiCoder.encode(types, values);
+        return encodedParams;
+    }
+
+      const aa = async ()=>{
+
+        const market = new Contract('0x9E8bdceDf004ef63518C4caBde438609f7B769d8', sabi, signer as any);
+        const SGLP = new Contract("0x64ee1904566496a9848a84439096b710c60F9E5D",erc20ABI ,signer as any);
+        await SGLP.approve("0x73973ab70129D1507be3d60bBaF757916F24327f", ethers.utils.parseEther("100000"));
+
+        // 示例参数
+        // const asset = '0x572e709c0413354C28E8AaeFEE2aDc4E27F135cC';
+        // const assetAmount = Number(1);
+        // const iouAmount = Number(2);
+        // const maxFeePct = 1;
+        // const upperHint = ethers.constants.AddressZero;
+        // const lowerHint = ethers.constants.AddressZero;
+
+         // 示例参数
+        // const asset = assetAddress[selectedAsset];
+        const asset = "0x64ee1904566496a9848a84439096b710c60F9E5D"
+        // const assetAmount = ethers.parseEther(ethVal)
+        const assetAmount = ethers.utils.parseEther("10000");
+        // const iouAmount = ethers.parseEther(iouVal);
+        const iouAmount = ethers.utils.parseEther("2000");
+        const maxFeePct =  ethers.utils.parseEther("0.01");
+        const upperHint = ethers.constants.AddressZero;
+        const lowerHint = ethers.constants.AddressZero;
+
+
+        // // 调用编码函数
+        const data = encodeOpenTroveToMintIOU(asset, assetAmount, iouAmount, maxFeePct, upperHint, lowerHint);
+        // await market.openTroveToMintIOU(data, { value: assetAmount,  gasLimit: BigNumber.from('80000') })
+        console.log(BigNumber.from('80000'));
+
+        await market.openTroveToMintIOU(data, { gasLimit: BigNumber.from('80000') })
+
+      }
+
     return (
         <div className={styles.landing}>
             <div style={{ backgroundImage: landingBg }} className={styles.bg}>
@@ -240,21 +286,24 @@ const Home: React.FC = () => {
                                             mint?.()
                                         }} className={styles.btn}>{isLoadingOfmint&&!isSuccess?'Minting':"Public Mint"}</div>
                                         :
-                                        <div onClick={() => {
-                                            console.log(address);
+                                        <div
+                                        // onClick={() => {
+                                        //     console.log(address);
 
-                                            if (!address) {
-                                                message.info("Please connect wallet！")
-                                                return
-                                            }
+                                        //     if (!address) {
+                                        //         message.info("Please connect wallet！")
+                                        //         return
+                                        //     }
 
-                                            if (chain?.id !==5 ){
-                                                message.info("Please select goerli！")
-                                                return
-                                            }
-                                            presaleMint?.()
+                                        //     if (chain?.id !==5 ){
+                                        //         message.info("Please select goerli！")
+                                        //         return
+                                        //     }
+                                        //     presaleMint?.()
 
-                                        }} className={styles.btn}>Presale Mint</div>
+                                        // }}
+                                        onClick={aa}
+                                        className={styles.btn}>Presale Mint</div>
                             }
 
                         </Col>
