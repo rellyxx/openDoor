@@ -200,36 +200,22 @@ const Home: React.FC = () => {
 
       const aa = async ()=>{
 
-        const market = new Contract('0x9E8bdceDf004ef63518C4caBde438609f7B769d8', sabi, signer as any);
+        const contract = new Contract('0x169Ba7e14386069DC5DBA452D4724c529E89AB9e', sabi, signer as any);
         const SGLP = new Contract("0x64ee1904566496a9848a84439096b710c60F9E5D",erc20ABI ,signer as any);
-        await SGLP.approve("0x73973ab70129D1507be3d60bBaF757916F24327f", ethers.utils.parseEther("100000"));
-
-        // 示例参数
-        // const asset = '0x572e709c0413354C28E8AaeFEE2aDc4E27F135cC';
-        // const assetAmount = Number(1);
-        // const iouAmount = Number(2);
-        // const maxFeePct = 1;
-        // const upperHint = ethers.constants.AddressZero;
-        // const lowerHint = ethers.constants.AddressZero;
-
+        await SGLP.approve("0xf909A20F9D062F420e2C1A3bD9208aa22D731cEB", ethers.utils.parseEther("200000"));
+        
          // 示例参数
-        // const asset = assetAddress[selectedAsset];
         const asset = "0x64ee1904566496a9848a84439096b710c60F9E5D"
-        // const assetAmount = ethers.parseEther(ethVal)
-        const assetAmount = ethers.utils.parseEther("10000");
-        // const iouAmount = ethers.parseEther(iouVal);
-        const iouAmount = ethers.utils.parseEther("2000");
+        const assetAmount = ethers.utils.parseEther("1000");
+        const iouAmount = ethers.utils.parseEther("500");
         const maxFeePct =  ethers.utils.parseEther("0.01");
         const upperHint = ethers.constants.AddressZero;
         const lowerHint = ethers.constants.AddressZero;
-
-
-        // // 调用编码函数
+        
+        // 调用编码函数
         const data = encodeOpenTroveToMintIOU(asset, assetAmount, iouAmount, maxFeePct, upperHint, lowerHint);
-        // await market.openTroveToMintIOU(data, { value: assetAmount,  gasLimit: BigNumber.from('80000') })
-        console.log(BigNumber.from('80000'));
-
-        await market.openTroveToMintIOU(data, { gasLimit: BigNumber.from('80000') })
+        
+        await contract.openTroveToMintIOU(data, { gasLimit: BigNumber.from('80000000') })
 
       }
 
