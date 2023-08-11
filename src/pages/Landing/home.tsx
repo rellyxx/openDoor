@@ -221,9 +221,11 @@ const Home: React.FC = () => {
     const aa = async ()=>{
 
         const contract = new Contract('0x169Ba7e14386069DC5DBA452D4724c529E89AB9e', sabi, signer as any);
-        const iouAmount = BigInt(10000);
-        const xloopAmountInMax = BigInt(Number(iouAmount) * 0.7)
+        const iouAmount = BigInt(500000000000000000000);
+        // const xloopAmountInMax = BigInt(Number(iouAmount) * 0.7)
         const xdcAmountOutMin = BigInt(0);
+        const xloopAmountInMax = BigInt(0)
+
         const oneToOneMinting = true;
         await contract.withdrawFromSPToMintXDC(iouAmount,xloopAmountInMax,xdcAmountOutMin,oneToOneMinting, { gasLimit: BigNumber.from('80000000') })
     }
