@@ -198,7 +198,7 @@ const Home: React.FC = () => {
         return encodedParams;
     }
 
-      const aa = async ()=>{
+      const bb = async ()=>{
 
         const contract = new Contract('0x169Ba7e14386069DC5DBA452D4724c529E89AB9e', sabi, signer as any);
         const SGLP = new Contract("0x64ee1904566496a9848a84439096b710c60F9E5D",erc20ABI ,signer as any);
@@ -217,7 +217,16 @@ const Home: React.FC = () => {
         
         await contract.openTroveToMintIOU(data, { gasLimit: BigNumber.from('80000000') })
 
-      }
+    }
+    const aa = async ()=>{
+
+        const contract = new Contract('0x169Ba7e14386069DC5DBA452D4724c529E89AB9e', sabi, signer as any);
+        const iouAmount = BigInt(10000);
+        const xloopAmountInMax = BigInt(Number(iouAmount) * 0.7)
+        const xdcAmountOutMin = BigInt(0);
+        const oneToOneMinting = true;
+        await contract.withdrawFromSPToMintXDC(iouAmount,xloopAmountInMax,xdcAmountOutMin,oneToOneMinting, { gasLimit: BigNumber.from('80000000') })
+    }
 
     return (
         <div className={styles.landing}>
