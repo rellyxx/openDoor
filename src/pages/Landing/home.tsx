@@ -14,7 +14,6 @@ import totaluser from './../../../public/icons/totaluser.svg'
 import availablevaults from './../../../public/icons/availablevaults.svg'
 import gloopNoName from './../../../public/open_door.svg'
 import gloop from './../../../public/icons/gloop.svg'
-import { abi as sabi } from  '../../ABI/XloopRouter.json'
 
 import { Link } from '@umijs/max';
 import { Web3Modal } from '@web3modal/react';
@@ -189,47 +188,6 @@ const Home: React.FC = () => {
         },
       })
 
-    const { data: signer, isError } = useSigner({ chainId: arbitrumGoerli.id })
-    const encodeOpenTroveToMintIOU = (asset: any, assetAmount: any, iouAmount: any, maxFeePct: any, upperHint: string, lowerHint: string) => {
-        const abiCoder = new ethers.utils.AbiCoder();
-        const types = ['address', 'uint256', 'uint256', 'uint256', 'address', 'address'];
-        const values = [asset, assetAmount, iouAmount, maxFeePct, upperHint, lowerHint];
-        const encodedParams = abiCoder.encode(types, values);
-        return encodedParams;
-    }
-
-      const bb = async ()=>{
-
-        const contract = new Contract('0x169Ba7e14386069DC5DBA452D4724c529E89AB9e', sabi, signer as any);
-        const SGLP = new Contract("0x64ee1904566496a9848a84439096b710c60F9E5D",erc20ABI ,signer as any);
-        await SGLP.approve("0xf909A20F9D062F420e2C1A3bD9208aa22D731cEB", ethers.utils.parseEther("200000"));
-        
-         // 示例参数
-        const asset = "0x64ee1904566496a9848a84439096b710c60F9E5D"
-        const assetAmount = ethers.utils.parseEther("1000");
-        const iouAmount = ethers.utils.parseEther("500");
-        const maxFeePct =  ethers.utils.parseEther("0.01");
-        const upperHint = ethers.constants.AddressZero;
-        const lowerHint = ethers.constants.AddressZero;
-        
-        // 调用编码函数
-        const data = encodeOpenTroveToMintIOU(asset, assetAmount, iouAmount, maxFeePct, upperHint, lowerHint);
-        
-        await contract.openTroveToMintIOU(data, { gasLimit: BigNumber.from('80000000') })
-
-    }
-    const aa = async ()=>{
-
-        const contract = new Contract('0x169Ba7e14386069DC5DBA452D4724c529E89AB9e', sabi, signer as any);
-        const iouAmount = BigInt(500000000000000000000);
-        // const xloopAmountInMax = BigInt(Number(iouAmount) * 0.7)
-        const xdcAmountOutMin = BigInt(0);
-        const xloopAmountInMax = BigInt(0)
-
-        const oneToOneMinting = true;
-        await contract.withdrawFromSPToMintXDC(iouAmount,xloopAmountInMax,xdcAmountOutMin,oneToOneMinting, { gasLimit: BigNumber.from('80000000') })
-    }
-
     return (
         <div className={styles.landing}>
             <div style={{ backgroundImage: landingBg }} className={styles.bg}>
@@ -284,22 +242,21 @@ const Home: React.FC = () => {
                                         }} className={styles.btn}>{isLoadingOfmint&&!isSuccess?'Minting':"Public Mint"}</div>
                                         :
                                         <div
-                                        // onClick={() => {
-                                        //     console.log(address);
+                                        onClick={() => {
+                                            console.log(address);
 
-                                        //     if (!address) {
-                                        //         message.info("Please connect wallet！")
-                                        //         return
-                                        //     }
+                                            if (!address) {
+                                                message.info("Please connect wallet！")
+                                                return
+                                            }
 
-                                        //     if (chain?.id !==5 ){
-                                        //         message.info("Please select goerli！")
-                                        //         return
-                                        //     }
-                                        //     presaleMint?.()
+                                            if (chain?.id !==5 ){
+                                                message.info("Please select goerli！")
+                                                return
+                                            }
+                                            presaleMint?.()
 
-                                        // }}
-                                        onClick={aa}
+                                        }}
                                         className={styles.btn}>Presale Mint</div>
                             }
 
