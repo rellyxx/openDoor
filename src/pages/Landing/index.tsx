@@ -40,7 +40,7 @@ import { alchemyProvider } from 'wagmi/providers/alchemy';
 import Home from './home';
 
 const { chains, provider } = configureChains(
-    [mainnet, goerli,],
+    [mainnet, goerli,arbitrumGoerli],
     [alchemyProvider({ apiKey: 'v54XKO_i8u4kDLFXG8PNQH32fJFQK6QH' }), publicProvider()]
 );
 
